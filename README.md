@@ -9,6 +9,8 @@ View on Expo : exp://exp.host/@shermann/SaftyReport
 ## Dependencies 
 
  React-Native-Navigation
+ 
  React-Native-Safe-Area-Context
+ 
  React-Native-Paper
  
