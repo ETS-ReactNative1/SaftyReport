@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
 
 function list(props) {
@@ -19,5 +20,25 @@ function list(props) {
             </List.Section>
     );
 }
+
+const styles = StyleSheet.create({
+    item: {
+      backgroundColor: "#f9c2ff",
+      paddingTop: 20,
+      marginVertical: 8
+    },
+    header: {
+      fontSize: 32,
+      backgroundColor: "#fff"
+    },
+    title: {
+      fontSize: 24
+    },
+    separator: {
+      marginVertical: 8,
+      borderBottomColor: '#737373',
+      borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+  });  
 
 export default list;

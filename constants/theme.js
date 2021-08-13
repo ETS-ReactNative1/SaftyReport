@@ -63,6 +63,13 @@ export const FONTS = {
     body4: { fontFamily: "Roboto-Regular", fontSize: SIZES.body4, lineHeight: 22 },
 };
 
-const appTheme = { COLORS, SIZES, FONTS };
+export const GLSTYLES = {
+    input: {
+        borderWidth:1,
+        borderColor:COLORS.primary
+    }
+};
+
+const appTheme = { COLORS, SIZES, FONTS, GLSTYLES };
 
 export default appTheme;

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Text, View,Image, SafeAreaView, SectionList,StyleSheet, Alert } from 'react-native';
+import {  View,Image, SafeAreaView, SectionList,StyleSheet, Alert } from 'react-native';
 
-import { List, Button } from 'react-native-paper';
+import { Text,Headline , Button } from 'react-native-paper';
 
 import { images, SIZES, COLORS } from '../constants';
 
@@ -20,6 +20,10 @@ function HomeScreen({ navigation }) {
         <Image style={{ width : '100%', height:'100%',  resizeMode: 'contain', flex:2   }}
         source={images.airport}>
         </Image>
+        <View style = {{ flex: 1, margin:5, justifyContent:'space-around', alignItems:'center'}}>
+          <Headline>Welcome</Headline>
+          <Button mode = 'contained' icon="plus" onPress={() => navigation.navigate('Status')}>Add New Report</Button>
+        </View>
         <View style = {{flex:3 ,paddingTop:5}}>
         <ListCompo
           first={list1.first}
@@ -27,9 +31,7 @@ function HomeScreen({ navigation }) {
           third={list1.third} 
         />
         </View>  
-        <View style = {{ flex: 1,margin:5}}>
-          <Button mode = 'contained' icon="plus" onPress={() => Alert.alert('Oh no!','Can\'t report for now')}>Add New Report</Button>
-        </View>
+        
       </SafeAreaView>
     );
   }

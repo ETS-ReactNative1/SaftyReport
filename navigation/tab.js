@@ -1,6 +1,6 @@
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { StatusBar } from 'expo-status-bar';
 import {Image } from 'react-native';
 
 import MainMenu from '../screen/mainMenu'
@@ -10,7 +10,7 @@ import Message from "../screen/message";
 
 import { icon, COLORS } from "../constants";
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 const tabOptions = {
     showLabel: false,
@@ -26,7 +26,7 @@ const Tabs = () => {
         tabBarOptions={tabOptions}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused }) => {
-                    const tintColor = focused ? COLORS.darkBlue : COLORS.lightBlue2;
+                    const tintColor = focused ? COLORS.white : COLORS.darkBlue;
 
                     switch (route.name) {
                         case "Main":
@@ -100,6 +100,7 @@ const Tabs = () => {
                 name="Message"
                 component={Message}
             />
+          
         </Tab.Navigator>
     )
 }
