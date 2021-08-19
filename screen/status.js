@@ -6,10 +6,10 @@ import { images, COLORS, SIZES } from '../constants';
 
 function status({ navigation, route }) {
 
-  const [data,setData] = useState([])
-  const [loading,setLoading]= useState(true)
+  //const [data,setData] = useState([])
+  //const [loading,setLoading]= useState(true)
 
-  /*const [cards, setCard] = useState([
+  const [cards, setCard] = useState([
     {
       repID:'1651ad',  
       imgURL: images.innerFac,
@@ -30,7 +30,7 @@ function status({ navigation, route }) {
             `
         
       }
-  ])*/
+  ])
 
   const fetchData = ()=>{
     fetch("http://localhost:3000/")
@@ -46,12 +46,12 @@ function status({ navigation, route }) {
  }
 
   useEffect(() => {
-    /*if (route.params?.post) {
+    if (route.params?.post) {
       addCard(route.params?.post);
     }
-  },[route.params?.post]);*/
-    fetchData()
-  },[])
+  },[route.params?.post]);
+    //fetchData()
+  //},[])
 
   const addCard = ( card ) => {
     card.repID = Math.random().toString();
