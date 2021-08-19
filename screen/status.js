@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
-import { FlatList, View, StyleSheet, Text, Image,Modal } from "react-native";
+import React, {useState, useEffect, useRef } from 'react';
+import { FlatList, View, StyleSheet, Alert, Image,Modal } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Card, Button, Title, Paragraph,  Portal, IconButton, Divider} from 'react-native-paper';
+import { Card, Button, Title, Paragraph,  Portal, IconButton, Divider,} from 'react-native-paper';
 import { images, COLORS, SIZES } from '../constants';
-import InputForm from '../components/InputForm';
 
-function status({ navigation }) {
+function status({ navigation, route }) {
 
-  const [visibleModal, setModal] = useState(false);
-  const [cards, setCard] = useState([
+  const [data,setData] = useState([])
+  const [loading,setLoading]= useState(true)
+
+  /*const [cards, setCard] = useState([
     {
       repID:'1651ad',  
       imgURL: images.innerFac,
@@ -29,34 +30,41 @@ function status({ navigation }) {
             `
         
       }
-  ])
+  ])*/
+
+  const fetchData = ()=>{
+    fetch("http://localhost:3000/")
+    .then(res=>res.json())
+    .then(results=>{
+
+      setData(results)
+      setLoading(false)
+
+    }).catch(err=>{
+        console.log(err);
+    })
+ }
+
+  useEffect(() => {
+    /*if (route.params?.post) {
+      addCard(route.params?.post);
+    }
+  },[route.params?.post]);*/
+    fetchData()
+  },[])
 
   const addCard = ( card ) => {
     card.repID = Math.random().toString();
     setCard((currentCards) => {
       return [card, ...currentCards]
     });
-    setModal(false);
+    
   }
 
   function deleteCard(id) {
     console.log(id);
     const remainingCards = cards.filter(delCard => id !== delCard.id);
     setCard(remainingCards);
-    console.log(remainingCards);
-  }
-
-  const RenderModal = () => {
-    return (
-    <View>
-      <Modal  visible={visibleModal}
-              animationType="slide">
-        <IconButton style={styles.modalClose} icon='close' onPress={() => setModal(false)} />        
-        <InputForm addCard={addCard} />
-        
-      </Modal>
-    </View>
-    )
   }
 
   const ListHeader = () => {
@@ -70,10 +78,10 @@ function status({ navigation }) {
             mode = 'contained' 
             icon="plus" 
             color={COLORS.white}
-            onPress={() => setModal(true)}
+            onPress={() => {
+              navigation.navigate('AddReport')}}
           > Report</Button>
       </View>
-      <RenderModal />
       </View>
     );
   };
@@ -103,9 +111,9 @@ function status({ navigation }) {
           ListHeaderComponent={ListHeader}
           deleteCard={deleteCard}
         //Card list items  
-          data={cards}
+          data={data}
           renderItem={renderItem}
-          keyExtractor={item => item.repID}
+          keyExtractor={item => item._id}
           
         />
       </SafeAreaView>

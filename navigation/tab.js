@@ -1,11 +1,9 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { StatusBar } from 'expo-status-bar';
 import {Image } from 'react-native';
 
 import MainMenu from '../screen/mainMenu'
 import Status from '../screen/status'
-import Profile from "../screen/profile";
 import Message from "../screen/message";
 
 import { icon, COLORS } from "../constants";
@@ -68,18 +66,7 @@ const Tabs = () => {
                                 />
                             )
 
-                        case "Message":
-                            return (
-                                <Image
-                                    source={icon.messenger}
-                                    resizeMode="contain"
-                                    style={{
-                                        tintColor: tintColor,
-                                        width: 25,
-                                        height: 25
-                                    }}
-                                />
-                            )
+                        
                     }
                 }
             })}
@@ -91,14 +78,6 @@ const Tabs = () => {
             <Tab.Screen
                 name="Status"
                 component={Status}
-            />
-            <Tab.Screen
-                name="Profile"
-                component={Profile}
-            />
-            <Tab.Screen
-                name="Message"
-                component={Message}
             />
           
         </Tab.Navigator>

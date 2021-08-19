@@ -1,19 +1,23 @@
-import React from 'react';
-import { StyleSheet, Button, TextInput, View, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Button, TextInput, View, Text, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import { COLORS } from '../constants';
-
+import AddImg from './addImg';
  
 export default InputForm = ({ addCard }) => {
+
+  const today = new Date();
+
   return (
   <View style={{flex:1, padding:10}}>
   <Formik
-    initialValues={{ title: '', content: '', date:'', isFinished:'No', desc: '' }}
+    initialValues={{ title: '', content: '', date: today.toDateString(), isFinished:'No', desc: '' }}
     onSubmit={(values) => {
       console.log(values);
       addCard(values);
       
     }}
+
   >
     {props => (
       <View>
@@ -38,6 +42,8 @@ export default InputForm = ({ addCard }) => {
           onChangeText={props.handleChange('desc')}
           value={props.values.desc}
         />
+
+        <AddImg />
         
         <Button color={COLORS.primary} title="Submit" onPress={props.handleSubmit} /> 
       </View>
@@ -55,6 +61,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderRadius: 6,
     marginBottom:5
-}
+},
   
 });  
