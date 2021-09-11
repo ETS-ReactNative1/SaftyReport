@@ -1,70 +1,76 @@
 import React, {useState, useEffect, useRef } from 'react';
-import { FlatList, View, StyleSheet, Alert, Image,Modal } from "react-native";
+import { FlatList, View, StyleSheet, RefreshControl, ActivityIndicator } from "react-native";
+import * as SecureStore  from 'expo-secure-store';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Card, Button, Title, Paragraph,  Portal, IconButton, Divider,} from 'react-native-paper';
+import { Card, Button, Title, Paragraph,  Portal, IconButton, Dialog,} from 'react-native-paper';
 import { images, COLORS, SIZES } from '../constants';
+import { AuthContext } from '../components/context';
 
 function status({ navigation, route }) {
-
+  
   const [data,setData] = useState([])
-  const [loading,setLoading]= useState(true)
+  const [loading,setLoading]= useState(false)
+  const [refreshing, setRefreshing] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  /*const [cards, setCard] = useState([
-    {
-      repID:'1651ad',  
-      imgURL: images.innerFac,
-      title:'Pipe Leak',
-      content: 'Water pipe leakage at the humidity facility ',
-      date: '05/5/1995',
-      isFinished:'No',
-      desc:`Bill ran from the giraffe toward the dolphin. 25 years later, she still regretted that specific moment. There are over 500 starfish in the bathroom drawer. The big was having an excellent day until he hit the windshield.`  
-      },
-      {
-      repID:'a1351',  
-      imgURL: images.darkStair,
-      title:'Unknown entry point',
-      content: 'Potential break in point',
-      date: '21/06/1999',
-      isFinished:'Doing',
-      desc: `He kept telling himself that one day it would all somehow make sense. Chocolate covered crickets were his favorite snack. Her fragrance of choice was fresh garlic.
-            `
-        
-      }
-  ])*/
+  const fetchData = async ()=>{
+    try{
+    const response = await fetch(`http://192.168.1.34:3001/api/report`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }});
 
-  const fetchData = ()=>{
-    fetch("http://192.168.1.34:3001/")
-    .then(res=>res.json())
-    .then(results=>{
+    const json = await response.json();
 
-      setData(results)
-      setLoading(false)
+    console.log(json);
 
-    }).catch(err=>{
-        console.log(err);
-    })
+    setData(json)
+    setLoading(false)
+  }catch(e){console.log(e);}
  }
 
+  const onRefresh = React.useCallback(() => {
+    setLoading(true)
+    setRefreshing(true);
+    fetchData().then(() => setRefreshing(false));
+  }, []);
+
   useEffect(() => {
-    /*if (route.params?.post) {
-      addCard(route.params?.post);
-    }
-  },[route.params?.post]);*/
-    fetchData()
+    
+    setLoading(true);
+    //bootstrapAsync();
+    
+    fetchData();
+
   },[])
 
-  const addCard = ( card ) => {
-    card.repID = Math.random().toString();
-    setCard((currentCards) => {
-      return [card, ...currentCards]
-    });
-    
+  const deleteCard = async (id) => {
+    fetch(`http://192.168.1.34:3001/api/report/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }}).
+    then(()=>
+    onRefresh()
+    ).
+    then(()=>
+    setVisible(true));
   }
 
-  function deleteCard(id) {
-    console.log(id);
-    const remainingCards = cards.filter(delCard => id !== delCard.id);
-    setCard(remainingCards);
+  const RenderDia = (props) => {
+    return (
+      <Dialog Dialog visible={visible} onDismiss={()=>setVisible(false)}>
+        <Dialog.Content>
+              <Paragraph>This report has been successfully deleted</Paragraph>
+        </Dialog.Content>
+        <Dialog.Actions>
+              <Button onPress={()=>setVisible(false)}>Done</Button>
+        </Dialog.Actions>
+      </Dialog>
+    )
   }
 
   const ListHeader = () => {
@@ -72,6 +78,9 @@ function status({ navigation, route }) {
     return (
       <View>
       <View style={{flex:1, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center', marginTop:10}}>
+        <Portal>
+          <RenderDia />
+        </Portal>
         <Title style={{flex:5, marginHorizontal:10}}>Report Status</Title>
           <Button
             style={{marginVertical:10,marginHorizontal:20, flex:1, alignSelf:'flex-end'}}
@@ -99,13 +108,14 @@ function status({ navigation, route }) {
                   data: {...item}
               });
             }} >More</Button>
-            <Button onPress={() => deleteCard(item.repID)} >Delete</Button>
+            <Button onPress={() => deleteCard(item.id)} >Delete</Button>
           </Card.Actions>
     </Card>);
   
 
   return (
-      <SafeAreaView>
+      <SafeAreaView >
+        {(!loading) ? (
         <FlatList
         //Render top components
           ListHeaderComponent={ListHeader}
@@ -113,19 +123,29 @@ function status({ navigation, route }) {
         //Card list items  
           data={data}
           renderItem={renderItem}
-          keyExtractor={item => item._id}
-          
-        />
+          keyExtractor={item => item.id}
+
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+        
+        />):
+        (
+          <SafeAreaView style={styles.container}>
+            <ActivityIndicator size="large" color={COLORS.black}/>
+          </SafeAreaView>)}
       </SafeAreaView>
     );
   }
 
   const styles = StyleSheet.create({
-    modalClose: {
-      borderWidth: 1,
-      borderColor:COLORS.white,
-      backgroundColor: COLORS.lightRed,
-      alignSelf:'center'
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems:'center'
     },
     
   });  

@@ -1,24 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Button, TextInput, View, Text, TouchableOpacity } from 'react-native';
+import * as SecureStore  from 'expo-secure-store';
 import { Formik } from 'formik';
+import { CommonActions } from '@react-navigation/native';
 import { COLORS } from '../constants';
 import AddImg from '../components/addImg';
 
 export default function addReport({ navigation, route }) {
 
-    const today = new Date();
+  const [userToken, setToken] = useState('')
+
+  useEffect(() => {
+
+    const bootstrapAsync = async () => {
+      try {
+      const Token = await SecureStore.getItemAsync('userToken');
+      setToken(Token);
+      }
+      catch(e) {console.log(e);}
+    };
+    
+    bootstrapAsync();
+  },[]);
+
+
+  const addReport = async (props) => {
+    return await fetch('http://192.168.1.34:3001/api/report', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization':`bearer ${userToken}`
+      },
+      body: JSON.stringify({
+        title: props.title,
+        content: props.content,
+        desc:props.desc
+      })
+    });
+  };
+
+  const handleSubmit = async (values) => {
+    
+    try {
+
+      addReport(values)
+      console.log(userToken);
+
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
 
   return (
   <View style={{flex:1, padding:10}}>
   <Formik
-    initialValues={{ title: '', content: '', date: today.toDateString(), isFinished:'No', desc: '' }}
-    onSubmit={(values) => {
-      console.log(values);
-      navigation.navigate({
-        name: 'Status',
-        params: { post: {...values} },
-        merge: true,
-      });
+    initialValues={{ title: '', content: '', desc: ''}}
+    onSubmit = {(values) => {
+      
+      handleSubmit(values);
+      navigation.dispatch(CommonActions.goBack());
       
     }}
 
