@@ -5,18 +5,18 @@ import { Text, Title,Subheading, Divider } from 'react-native-paper';
 import { images, COLORS, SIZES } from '../constants';
 
 function viewMore( {route, navigation} ) {
-    const { title, content, date, desc, imgURL } = route.params.data;
+    const { title, content, date, desc, imgUrl } = route.params.data;
     return (
         <ScrollView contentContainerStyle={{flex:1,justifyContent: 'space-between', backgroundColor:COLORS.primary }}>
             <View style={{flex:1,justifyContent: 'space-between' }}>
-            <Image source={imgURL} style={{flex:1,resizeMode:'stretch',width:SIZES.width}} />
+            <Image source={{uri:imgUrl}} style={{flex:1,resizeMode:'stretch',width:SIZES.width}} />
             </View>
             <View style={{flex:2,justifyContent: 'space-between', alignItems: 'center', margin:5 }}>
                 <View style={{flex:1}}>
                 <Title style={styles.title}> {title}</Title>
                 <Subheading style={styles.subHeader}>{content}</Subheading>
                    
-                <Text style={styles.styleTxt}> {date}</Text>
+                <Text style={styles.styleTxt}> {new Date(date).toLocaleDateString('en-gb')}</Text>
                 </View> 
                 <View style={{flex:3}}>
                     <Text style={styles.styleTxt}> {desc}</Text>

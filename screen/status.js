@@ -1,12 +1,13 @@
-import React, {useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect } from 'react';
 import { FlatList, View, StyleSheet, RefreshControl, ActivityIndicator } from "react-native";
-import * as SecureStore  from 'expo-secure-store';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card, Button, Title, Paragraph,  Portal, IconButton, Dialog,} from 'react-native-paper';
 import { images, COLORS, SIZES } from '../constants';
-import { AuthContext } from '../components/context';
+import { UserContext } from '../components/context/user';
 
 function status({ navigation, route }) {
+
+  const { state } = React.useContext(UserContext);
   
   const [data,setData] = useState([])
   const [loading,setLoading]= useState(false)
@@ -15,11 +16,12 @@ function status({ navigation, route }) {
 
   const fetchData = async ()=>{
     try{
-    const response = await fetch(`http://192.168.1.34:3001/api/report`, {
+    const response = await fetch(`http://192.168.1.34:3001/api/report/user`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'Authorization':`bearer ${state.userToken}`
       }});
 
     const json = await response.json();
@@ -40,8 +42,6 @@ function status({ navigation, route }) {
   useEffect(() => {
     
     setLoading(true);
-    //bootstrapAsync();
-    
     fetchData();
 
   },[])
@@ -77,6 +77,7 @@ function status({ navigation, route }) {
     //View to set in Header
     return (
       <View>
+   
       <View style={{flex:1, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center', marginTop:10}}>
         <Portal>
           <RenderDia />
@@ -88,17 +89,31 @@ function status({ navigation, route }) {
             icon="plus" 
             color={COLORS.white}
             onPress={() => {
-              navigation.navigate('AddReport')}}
+              navigation.navigate('AddReport', {
+                onGoBack: () => onRefresh(),
+              })}}
           > Report</Button>
-      </View>
+      </View> 
       </View>
     );
   };
 
+  const ListFooter = () => {
+    return (
+      <View style={styles.container}>
+        { data.length === 0 ? (
+        <Title>You have no report!</Title>
+        ):(
+          <View></View>
+        )}
+      </View>
+    )
+  }
+
     const renderItem = ({ item }) => (
       <Card style={{margin:5}}>
-       <Card.Cover source={item.imgURL} />
-       <Card.Title title={item.title} subtitle={item.date} />
+       <Card.Cover source={{uri:item.imgUrl}} />
+       <Card.Title title={item.title} subtitle={new Date(item.date).toLocaleDateString('en-gb')} />
           <Card.Content>
             <Paragraph>{item.content}</Paragraph>
           </Card.Content>
@@ -119,6 +134,7 @@ function status({ navigation, route }) {
         <FlatList
         //Render top components
           ListHeaderComponent={ListHeader}
+          ListFooterComponent={ListFooter}
           deleteCard={deleteCard}
         //Card list items  
           data={data}

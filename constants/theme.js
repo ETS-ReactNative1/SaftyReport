@@ -13,6 +13,7 @@ export const COLORS = {
     lightGray2: "#EFEFF0",
     lightGray3: '#D4D5D6',
     lightGray4: '#7D7E84',
+    lightGray5: '#EAEAEA',
     gray: "#2D3038",
     gray1: "#282C35",
     darkRed: "#31262F",
@@ -67,6 +68,14 @@ export const GLSTYLES = {
     input: {
         borderWidth:1,
         borderColor:COLORS.primary
+    },
+    loadingModal:{
+        alignSelf:'center',
+        width:'75%',
+        height:'25%',
+        backgroundColor: COLORS.primary,
+        //opacity: 0.75,
+        borderRadius:15, 
     }
 };
 

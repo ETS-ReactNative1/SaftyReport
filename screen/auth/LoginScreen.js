@@ -33,6 +33,7 @@ export default function Login({navigation , route}) {
       if (login.status === 200) {
         setLoading(false);  
         signIn(response);
+        console.log(response.token)
         
       }
       else {

@@ -10,8 +10,8 @@ function root() {
     return (
       <Stack.Navigator>
           <Stack.Screen name="Home" component={Tabs} options={{headerShown:false}} />
-          <Stack.Screen name ="AddReport" component={ addReport } options={{ title: 'Add Report' }} />
-          <Stack.Screen name ="ViewMore" component={ viewMore } options={{ title: 'More Detail', }} />
+          <Stack.Screen name ="AddReport" component={ addReport } options={{headerShown:false}} />
+          <Stack.Screen name ="ViewMore" component={ viewMore } options={{headerShown:false}} />
         </Stack.Navigator>
     )
   }
