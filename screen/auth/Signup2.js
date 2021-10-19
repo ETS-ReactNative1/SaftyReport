@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React, {useState} from "react";
 
-
 import { View, ActivityIndicator } from 'react-native'
+import { Portal, Dialog, Title, IconButton, Subheading } from "react-native-paper";
 
 //import  formik
 import { Formik } from "formik";
@@ -19,8 +19,8 @@ import {StyledContainer,InnerContainer,PageLogo,PageTitle, StyledContainerlogin,
 
 
 //colors
-const {brand, darkLight, primary} = Colors;
-import {COLORS, icon, images } from '../../constants';
+const {brand, darkLight,} = Colors;
+import {COLORS, GLSTYLES, icon, } from '../../constants';
 
 //keyboard avoiding view
 import KeyboardAvoidingWrapper  from "../../components/KeyboardAvoidingWrapper";
@@ -31,15 +31,28 @@ const Signup= ({navigation}) => {
  
     const [hidePassword, setHidePassword] = useState(true);
     const [isLoading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
     const { signUp } = React.useContext(AuthContext);
+
+    const hideDialog = () => setVisible(false);
+    const showDialog = () => setVisible(true);
+  
 
     async function creatAcc(data) {
         try {
+          
         setLoading(true);
-        signUp(data);  
+        const res = await signUp(data);
+
+        if( res.success == false){
+          setLoading(false);
+          showDialog();
+          setLoading(false);
+        }
+
       } catch (e) {
     
-        setLoading(false);
+
         console.log(e);
       }
       }
@@ -141,6 +154,18 @@ const Signup= ({navigation}) => {
                         </ExtraView>
                     </StyledFormArea>)}
             </Formik>
+            <Portal>
+            <Dialog visible={visible} onDismiss={hideDialog} style={GLSTYLES.errModal}>
+              <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+              <IconButton icon={icon.error} color={COLORS.white} size={36}/>
+                <Title style={{color:COLORS.white}}>Invalid Email!</Title>
+                <Subheading style={{textAlign:'center' ,color:COLORS.white}}>This email has already been used.</Subheading>
+                <Dialog.Actions>
+                  <IconButton icon={icon.close} color={COLORS.white} onPress={() => hideDialog()}>Close</IconButton>
+               </Dialog.Actions>
+              </View>
+            </Dialog>
+          </Portal>
             </InnerContainer>
         </StyledContainer>
         </KeyboardAvoidingWrapper>

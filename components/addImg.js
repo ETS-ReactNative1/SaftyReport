@@ -31,8 +31,7 @@ export default function UploadImg({sentURL}) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 1,
+      quality: 0.25,
       base64:true
     });
 
@@ -47,8 +46,7 @@ export default function UploadImg({sentURL}) {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 1,
+      quality: 0.25,
       base64:true
     });
 

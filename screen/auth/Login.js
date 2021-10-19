@@ -30,7 +30,7 @@ import { View, ActivityIndicator } from 'react-native';
 
 //colors
 const { darkLight, brand, primary } = Colors;
-import { COLORS, GLSTYLES } from '../../constants';
+import { COLORS, GLSTYLES, } from '../../constants';
 
 // icon
 import { Octicons, Fontisto, Ionicons } from '@expo/vector-icons';

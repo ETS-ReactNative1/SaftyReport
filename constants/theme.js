@@ -76,6 +76,14 @@ export const GLSTYLES = {
         backgroundColor: COLORS.primary,
         //opacity: 0.75,
         borderRadius:15, 
+    },
+    errModal:{
+        alignSelf:'center',
+        width:'75%',
+        height:'25%',
+        backgroundColor: COLORS.lightRed,
+        //opacity: 0.75,
+        borderRadius:15, 
     }
 };
 

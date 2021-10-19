@@ -10,6 +10,8 @@ import Root from './navigation/root';
 import DrawerContent from './screen/drawerContent';
 import AuthNav from './navigation/authNav';
 
+import { api } from './constants/api';
+
 import { AuthContext } from './components/context/auth';
 import { UserContext } from './components/context/user';
 
@@ -88,7 +90,7 @@ export default function App() {
       // screen will be unmounted and thrown away.
       if (userToken !== null){
         try{
-          const login = await fetch('http://192.168.1.34:3001/api/auth/retID', {
+          const login = await fetch(`${api}/api/auth/retID`, {
             method: 'GET',
             headers: {
               Accept: 'application/json',
@@ -114,7 +116,7 @@ export default function App() {
     () => ({
       signIn: async data => {
         try{
-        const login = await fetch('http://192.168.1.34:3001/api/auth/login', {
+        const login = await fetch(`${api}/api/auth/login`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -154,7 +156,7 @@ export default function App() {
       },
       signUp: async data => {
         try{
-          const login = await fetch('http://192.168.1.34:3001/api/auth/register', {
+          const login = await fetch(`${api}/api/auth/register`, {
               method: 'POST',
               headers: {
                 Accept: 'application/json',

@@ -7,20 +7,15 @@ import { images, COLORS, SIZES } from '../constants';
 function viewMore( {route, navigation} ) {
     const { title, content, date, desc, imgUrl } = route.params.data;
     return (
-        <ScrollView contentContainerStyle={{flex:1,justifyContent: 'space-between', backgroundColor:COLORS.primary }}>
-            <View style={{flex:1,justifyContent: 'space-between' }}>
-            <Image source={{uri:imgUrl}} style={{flex:1,resizeMode:'stretch',width:SIZES.width}} />
+        <ScrollView contentContainerStyle={{flex:1, backgroundColor:COLORS.primary }}>
+            <View style={{flex:1, padding:5 }}>
+            <Image source={{uri:imgUrl}} style={{flex:1,resizeMode:'center'}} />
             </View>
-            <View style={{flex:2,justifyContent: 'space-between', alignItems: 'center', margin:5 }}>
-                <View style={{flex:1}}>
+            <View style={{flex:2, alignItems: 'center', margin:5, backgroundColor:COLORS.white, borderRadius:5 }}>
                 <Title style={styles.title}> {title}</Title>
                 <Subheading style={styles.subHeader}>{content}</Subheading>
-                   
                 <Text style={styles.styleTxt}> {new Date(date).toLocaleDateString('en-gb')}</Text>
-                </View> 
-                <View style={{flex:3}}>
-                    <Text style={styles.styleTxt}> {desc}</Text>
-                </View>
+                <Text style={styles.styleTxt}> {desc}</Text>
                 </View>           
         </ScrollView>        
     );
@@ -44,11 +39,11 @@ const styles = StyleSheet.create({
         
     },
     subHeader:{
-        color:COLORS.white,
+        color:COLORS.black,
         textAlign:'center'
     },
     styleTxt:{
-        color:COLORS.white,
+        color:COLORS.black,
         padding:5, 
         textAlign:'center',
     },

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRecoilValue } from "recoil";
 import { Image, View, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Title,IconButton, Avatar, Divider, List, Button } from 'react-native-paper';
