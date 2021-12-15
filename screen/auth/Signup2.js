@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React, {useState} from "react";
 
-import { View, ActivityIndicator } from 'react-native'
-import { Portal, Dialog, Title, IconButton, Subheading } from "react-native-paper";
+import { View, ActivityIndicator, StyleSheet } from 'react-native'
+import { Portal, Dialog, Title, IconButton, Subheading, Modal } from "react-native-paper";
 
 //import  formik
 import { Formik } from "formik";
@@ -27,12 +27,13 @@ import KeyboardAvoidingWrapper  from "../../components/KeyboardAvoidingWrapper";
 
 import { AuthContext } from '../../components/context/auth';
 
+
 const Signup= ({navigation}) => {
- 
+
+    const { signUp } = React.useContext(AuthContext);
     const [hidePassword, setHidePassword] = useState(true);
     const [isLoading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
-    const { signUp } = React.useContext(AuthContext);
 
     const hideDialog = () => setVisible(false);
     const showDialog = () => setVisible(true);
@@ -185,4 +186,5 @@ const MyTextInput = ({label, icon , isPassword, hidePassword,setHidePassword ,..
         </View>
     );
 }
+
 export default Signup;

@@ -26,7 +26,8 @@ import {
   TextLinkContent,
   Colors,
 } from '../../components/styled';
-import { View, ActivityIndicator } from 'react-native';
+import { View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
 //colors
 const { darkLight, brand, primary } = Colors;
@@ -39,7 +40,7 @@ import { Octicons, Fontisto, Ionicons } from '@expo/vector-icons';
 import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper';
 
 import { AuthContext } from '../../components/context/auth';
-
+import { UserContext } from "../../components/context/user";
 
 const Login = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
@@ -52,6 +53,7 @@ const Login = ({ navigation }) => {
   const showDialog = () => setVisible(true);
 
   const { signIn } = React.useContext(AuthContext);
+  const { state } = React.useContext(UserContext);
 
   async function handlelogin(data) {
 
@@ -94,7 +96,11 @@ const Login = ({ navigation }) => {
         <InnerContainer>
           <PageLogo resizeMode="cover" source={require('../../assets/img/Logo_AOT.png')} />
           <SubTitle>Account Login</SubTitle>
-
+          {state.isLoading ?
+          <View style={{flex:1,height:"100%", backgroundColor:COLORS.white}}>
+              <ActivityIndicator />
+          </View>
+          :
           <Formik
             initialValues={{ email: '', password: '' }}
             onSubmit={(values) => {
@@ -164,6 +170,7 @@ const Login = ({ navigation }) => {
               </StyledFormArea>
             )}
           </Formik>
+          }
           <Portal>
             <Modal visible={visible} onDismiss={hideDialog} contentContainerStyle={{...GLSTYLES.loadingModal,opacity:1}}>
               <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>

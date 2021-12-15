@@ -2,12 +2,13 @@ import React from 'react';
 import { Image, View, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Title,IconButton, Avatar, Divider, List, Button } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { images, COLORS, SIZES } from '../constants';
 
 import { AuthContext } from '../components/context/auth';
 import { UserContext } from '../components/context/user';
 
-function drawerContent(props) {
+function drawerContent({ navigation }) {
 
     const { signOut } = React.useContext(AuthContext);
     const { state } = React.useContext(UserContext);
@@ -19,17 +20,6 @@ function drawerContent(props) {
                 <Avatar.Image size={75} source={images.defPP}/>
                 <Title>{state.userProfile.name}</Title>
             </View>
-            <Divider />
-            <List.Section>
-                <List.Item 
-                    title="500 Total Reports"
-                    left={() => <List.Icon icon="alert-octagon" />} 
-             />
-                <List.Item
-                    title="260 Reports is Ongoing"
-                    left={() => <List.Icon icon="arrow-right-bold-box" />}
-            />
-            </List.Section>
             <Divider />
             <List.Section>
              <List.Item 
@@ -47,6 +37,9 @@ function drawerContent(props) {
             </List.Section>
             <Divider />
             <Button
+                onPress={() => {
+                    navigation.navigate('EditProfile')
+                }}
                    >Edit Profile</Button>
             <Button
                  onPress={()=>{signOut()}}   

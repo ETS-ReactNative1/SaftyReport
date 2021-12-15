@@ -19,7 +19,7 @@ function CardItem(props) {
             <View style={styles.modalView}>
               <Title>Are you sure to delete this report?</Title>
               <Subheading>This action cannot be reversed.</Subheading>
-              <View style={{flexDirection:'row',justifyContent:'space-around', margin:5}}>
+              <View style={{flexDirection:'row',justifyContent:'space-between', margin:15}}>
                 <Button mode='contained' color={COLORS.lightRed} onPress={() => props.deleteCard(props.item)}>Confirm</Button>
                 <Button onPress={()=>setVisible(false)}>Cancel</Button>
                 </View>
@@ -30,17 +30,48 @@ function CardItem(props) {
       )
     }
 
+    const StatusDisplay = () => {
+      switch(props.item.isFinished) {
+        case "Not Finished":
+                return (
+                  <View style={{...styles.statusContainer, borderColor:COLORS.lightRed, backgroundColor:COLORS.lightRed}}>
+                    <Paragraph style={{color:COLORS.white, fontWeight:"bold"}}>UNFINISH</Paragraph>
+                  </View>
+                )
+            case "Going":
+                return (
+                  <View style={{...styles.statusContainer, borderColor:COLORS.lightBlue1, backgroundColor:COLORS.lightBlue1}}>
+                    <Paragraph style={{color:COLORS.white, fontWeight:"bold"}}>UNDER INVESTIGATION</Paragraph>
+                  </View>
+                )
+            case "Done":
+                return (
+                  <View style={{...styles.statusContainer, borderColor:COLORS.lightGreen, backgroundColor:COLORS.lightGreen}}>
+                    <Paragraph style={{color:COLORS.white, fontWeight:"bold"}}>COMPLETED</Paragraph>
+                  </View>
+                )
+            default:
+                return(
+                  <View style={{...styles.statusContainer, borderColor:COLORS.gray, backgroundColor:COLORS.gray}}>
+                    <Paragraph style={{color:COLORS.white, fontWeight:"bold"}}>UNKNOWN</Paragraph>
+                  </View>
+                )         
+      }
+    }
+
     return (
     <View>
       <RenderDia />
-    <Card style={{margin:5}}>
+    <Card style={{margin:5, elevation:15, backgroundColor:COLORS.primary}}>
        <Card.Cover source={{uri:props.item.imgUrl}} />
-       <Card.Title title={props.item.title} subtitle={new Date(props.item.date).toLocaleDateString('en-gb')} />
+       <Card.Title title={props.item.title} titleStyle={styles.textCardStyles} subtitle={`${new Date(props.item.date).toLocaleDateString('en-gb')}, ${props.item.content}`} />
           <Card.Content>
-            <Paragraph>{props.item.content}</Paragraph>
+            <View style={{flex:1}}>
+              <StatusDisplay />
+            </View>
           </Card.Content>
           <Card.Actions>
-            <Button color={COLORS.primary} 
+            <Button color={COLORS.white} 
             onPress={() => {
                 navigation.navigate('ViewMore', {
                   data:{...props.item}
@@ -60,10 +91,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    margin: 20,
+    margin: 10,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 10,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -74,6 +105,17 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5
   },
+  statusContainer:{
+    flexDirection:'row',
+    alignSelf:'flex-start',
+    paddingHorizontal:5,
+    borderRadius:15,
+    borderWidth:2,
+    padding:5
+},
+  textCardStyles:{
+    color:COLORS.white,
+  }
 })
 
 export default CardItem;

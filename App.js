@@ -9,6 +9,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Root from './navigation/root';
 import DrawerContent from './screen/drawerContent';
 import AuthNav from './navigation/authNav';
+import editProfile from './screen/editProfile';
 
 import { api } from './constants/api';
 
@@ -55,6 +56,12 @@ export default function App() {
               email:''
             },
           };
+        case 'UPDATE':
+          return {
+            ...prevState,
+            userProfile: action.data,
+            userToken: action.token,
+          }
       }
     },
     {
@@ -114,6 +121,7 @@ export default function App() {
 
   const authContext = React.useMemo(
     () => ({
+
       signIn: async data => {
         try{
         const login = await fetch(`${api}/api/auth/login`, {
@@ -145,6 +153,7 @@ export default function App() {
         console.log(e);
       }
       },
+
       signOut: () => {
         SecureStore.deleteItemAsync('userToken')
         .then(
@@ -154,13 +163,14 @@ export default function App() {
           console.log(error);
         })
       },
+
       signUp: async data => {
         try{
           const login = await fetch(`${api}/api/auth/register`, {
               method: 'POST',
               headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
               },
               body: JSON.stringify({
                 name: data.name,
@@ -187,6 +197,33 @@ export default function App() {
           }catch(e){
             console.log(e);
           }},
+
+      updateProfile: async data => {
+            try{
+            const login = await fetch(`${api}/api/auth/updateUser`, {
+              method: 'PUT',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':`bearer ${state.userToken}`
+              },
+              body: JSON.stringify({
+                name: data.name,
+                position: data.position,
+                email: data.email,
+              })
+            });
+            
+            const response = await login.json();
+    
+            dispatch({ type: 'UPDATE', token: response.token, data: response.data })
+
+            return response;
+
+          }catch(e){
+            console.log(e);
+          }
+          },
     }),
     []
   );
@@ -195,18 +232,19 @@ export default function App() {
     <SafeAreaProvider>
     <PaperProvider>
     <AuthContext.Provider value={authContext} >
+    <UserContext.Provider value={{state}}>
     <NavigationContainer>
       { state.userToken == null ? (
       <AuthNav />
       ):(
-      <UserContext.Provider value={{state}}>
-      <Drawer.Navigator drawerContent={prop => <DrawerContent {...prop}/>}  >
-        <Drawer.Screen name="Home" component={Root} />
-    </Drawer.Navigator>
-    </UserContext.Provider>
+        <Drawer.Navigator drawerContent={prop => <DrawerContent {...prop}/>}  >
+          <Drawer.Screen name="Home" component={Root} />
+          <Drawer.Screen name="EditProfile" component={editProfile} />
+        </Drawer.Navigator>
       )
     }
     </NavigationContainer>
+    </UserContext.Provider>
     </AuthContext.Provider>
     </PaperProvider>
     </SafeAreaProvider>

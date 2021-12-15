@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, View, Text, ActivityIndicator, Pressable,  } from 'react-native';
-import { Portal, Title, IconButton, Dialog, Subheading, Button } from 'react-native-paper';
+import { Portal, Title, IconButton, Dialog, Subheading, Button, Headline, Paragraph, Divider } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import {Picker} from '@react-native-picker/picker';
 
 import { COLORS, GLSTYLES, SIZES, icon, } from '../constants';
 import { api } from '../constants/api';
 import AddImg from '../components/addImg';
 
 import { UserContext } from '../components/context/user';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 const reviewSchema = yup.object({
   title: yup.string()
@@ -26,9 +28,12 @@ export default function addReport({ navigation, route }) {
   const { state } = React.useContext(UserContext);
 
   const [imgData, setImg] = useState(null);
+  const [zoneData, setZoneData] = useState(null);
+  const [zoneDataDesc, setZDDVisible] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isError, setError] = useState(false);
   const [isImgSet,setReady] = useState(false);
+
 
   const hideDialog = () => {
           setError(false);
@@ -114,7 +119,7 @@ export default function addReport({ navigation, route }) {
     setReady(true);
   }
 
-  const handleSubmit = async (values) => {
+  const Submiting = async (values) => {
     
     try {
       //Check if server is responsing
@@ -142,6 +147,28 @@ export default function addReport({ navigation, route }) {
     }
   }
 
+  const fetchZonesData = async ()=>{
+    try{
+    const response = await fetch(`${api}/api/zone`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }});
+
+    const result = await response.json();
+    setZoneData(result);
+
+  }catch(e){console.log(e);}
+ }
+
+ useEffect(() => {
+    
+  fetchZonesData();
+
+
+},[]);
+
   return (
   <View style={styles.outerContainer}>
     <View style={{ alignContent:'center'}}>
@@ -152,13 +179,13 @@ export default function addReport({ navigation, route }) {
     </View>
   <View style={styles.innnerContainer}>
   <Formik
-    initialValues={{ title: '', content: '', desc: ''}}
+    initialValues={{ title: '', desc: '', content: '' }}
     validationSchema={reviewSchema}
     onSubmit = {(values) => {
-      handleSubmit(values);
+      Submiting(values);
     }}
   >
-    {props => (
+    {(props) => (
       <View>
 
         {/*Title Field*/}
@@ -177,22 +204,7 @@ export default function addReport({ navigation, route }) {
           value={props.values.title}
         />)}
 
-        {/*location Field*/}
-        {(props.touched.content && props.errors.content)?
-        <TextInput
-          style={styles.errinput}
-          placeholder={props.errors.title}
-          placeholderTextColor={COLORS.darkRed}
-          onChangeText={props.handleChange('content')}
-          value={props.values.content}
-        />:(
-          <TextInput
-          style={styles.input}
-          placeholder='Location'
-          onChangeText={props.handleChange('content')}
-          value={props.values.content}
-        />)}
-
+        
         {/*Description Field*/}
         {(props.touched.desc && props.errors.desc)?
         <TextInput
@@ -208,6 +220,30 @@ export default function addReport({ navigation, route }) {
           onChangeText={props.handleChange('desc')}
           value={props.values.desc}
         />)}
+
+
+  
+          <TouchableOpacity style={{flexDirection:"row", alignItems:"center", marginVertical:-10, paddingStart:15}} onPress={() => setZDDVisible(true)}>
+            <Text>Select Zone</Text>
+            <IconButton icon={"map-marker-question"} color={COLORS.primary}/>
+          </TouchableOpacity>
+        <View style={{...styles.input, height:60, }}>
+        <Picker
+          itemStyle={{color:COLORS.lightGray}}
+          mode='dropdown'
+          placeholder="Select City"
+          selectedValue={props.values.content}
+          onValueChange={props.handleChange('content')}>
+          <Picker.Item  label="Select Location" value={"null"} enabled={false} />
+          {zoneData && zoneData.map((item) => {
+        return(
+          <Picker.Item 
+              label={item.ZoneName.toString()} 
+              value={item.ZoneName.toString()} 
+              key={item.ZoneID.toString()} />)
+        })}
+        </Picker>
+        </View>
 
         <AddImg sentURL = {sentURL}/>
 
@@ -248,6 +284,24 @@ export default function addReport({ navigation, route }) {
     </View>
   </Dialog>
   )}
+
+  <Dialog visible={zoneDataDesc} onDismiss={()=>setZDDVisible(false)} style={styles.zoneDescContainer}>
+    <Dialog.Title>Location Description</Dialog.Title>
+    <Divider style={{borderWidth:0.5, borderColor:COLORS.white}}/>
+    <Dialog.Content style={{marginTop:5}}>
+      <ScrollView>
+    {zoneData && zoneData.map((item) => {
+        return(
+        <View style={{borderBottomWidth:1, borderBottomColor:COLORS.black, marginBottom:5}} key={item.ZoneID}>
+          <Subheading style={{fontStyle:"italic"}}>{item.ZoneName}</Subheading>
+          <Paragraph>{item.Desc}</Paragraph>
+        </View>
+          )
+        })}
+        </ScrollView>
+      </Dialog.Content>
+  </Dialog>
+
   </Portal>
 
 
@@ -286,6 +340,7 @@ export default function addReport({ navigation, route }) {
           marginBottom:7
     },
       buttonStyle:{
+        height:50,
         backgroundColor:COLORS.primary,
         borderRadius:10,
         marginTop:5,
@@ -308,5 +363,13 @@ export default function addReport({ navigation, route }) {
         color:COLORS.white,
         fontSize: SIZES.body2,
         marginRight:15
-      }
+      },
+      zoneDescContainer:{
+        backgroundColor:COLORS.lightBlue2,
+
+      },
+      dividerStyle: {
+        color:COLORS.black,
+        margin:10
+    },
       });  
