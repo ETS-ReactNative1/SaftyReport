@@ -21,6 +21,13 @@ LogBox.ignoreLogs([
  'Non-serializable values were found in the navigation state',
 ]);
 
+const defaultValues = {
+        name:'',
+        username:'',
+        position:'',
+        phone:'',
+        email:''
+}
 
 const Drawer = createDrawerNavigator();
 
@@ -69,16 +76,10 @@ export default function App() {
       isSignout: false,
       userToken: null,
       userProfile: {
-        name:'',
-        username:'',
-        position:'',
-        phone:'',
-        email:''
+        defaultValues
       },
     }
   );
-
-
 
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
@@ -113,6 +114,9 @@ export default function App() {
         }catch(er){
           console.log();
         }
+      }
+      else{
+          dispatch({ type: 'RESTORE_TOKEN', token: null, data: defaultValues });
       }
     };
 
