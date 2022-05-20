@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Portal, Modal, Title } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 
@@ -8,7 +8,6 @@ import { Formik } from 'formik';
 import {
   StyledContainer,
   PageLogo,
-  PageTitle,
   SubTitle,
   StyledInputLabel,
   StyledFormArea,
@@ -18,7 +17,6 @@ import {
   RightIcon,
   InnerContainer,
   ButtonText,
-  MsgBox,
   Line,
   ExtraView,
   ExtraText,
@@ -30,11 +28,11 @@ import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
 //colors
-const { darkLight, brand, primary } = Colors;
+const { darkLight, brand } = Colors;
 import { COLORS, GLSTYLES, } from '../../constants';
 
 // icon
-import { Octicons, Fontisto, Ionicons } from '@expo/vector-icons';
+import { Octicons, Ionicons } from '@expo/vector-icons';
 
 // keyboard avoiding view
 import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper';
@@ -117,7 +115,7 @@ const Login = ({ navigation }) => {
 
                 <MyTextInput
                   label="Email Address"
-                  placeholder="andyj@gmail.com"
+                  placeholder="email@address.com"
                   placeholderTextColor={darkLight}
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}

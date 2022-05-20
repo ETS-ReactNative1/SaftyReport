@@ -30,11 +30,12 @@ const styles = StyleSheet.create({
     },
     button: {
       justifyContent:"center",
+      textAlign:'center',
       alignItems: "center",
-      paddingVertical:5,
+      padding:5,
       borderRadius:5,
-      width:100,
-      height:35
+      width:125,
+      height:40
     },
   });
 

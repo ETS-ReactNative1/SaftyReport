@@ -1,25 +1,10 @@
 import * as React from 'react';
-import {  View,Image, SafeAreaView, SectionList,StyleSheet, Alert } from 'react-native';
-
-import { Text,Headline , Button, ActivityIndicator } from 'react-native-paper';
-
-import { images, SIZES, COLORS } from '../constants';
-
+import {  View,Image, SafeAreaView } from 'react-native';
+import { Text, Headline , Button, } from 'react-native-paper';
+import { images, COLORS } from '../constants';
 import ListCompo from '../components/listReward';
 
-
-
-const list1 = {
-  first:'Trip to North Korea',
-  second: 'Swiss Cheese',
-  third: 'Diesel Bicycle'
-  ,
-};
-
 function HomeScreen({ navigation }) {
-
-
-
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center',  backgroundColor:COLORS.white }}>
         <View style={{flex:1,}}>
@@ -34,9 +19,8 @@ function HomeScreen({ navigation }) {
           </View>
         </View>
         <View style = {{flex:1, }}>
-        <ListCompo />
+          <ListCompo />
         </View>  
-        
       </SafeAreaView>
     );
   }

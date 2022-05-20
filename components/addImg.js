@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, TouchableOpacity, StyleSheet } from 'react-native';
-import { Text, Button, Portal, Dialog } from 'react-native-paper';
+import { Text, Button, Portal, Dialog, List } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -71,9 +71,18 @@ export default function UploadImg({sentURL}) {
 
             <Portal>
               <Dialog visible={visible} onDismiss={hideDialog}>
+                <Dialog.Title>Add from...</Dialog.Title>
                 <Dialog.Content>
-                <Button onPress={pickImage}>Add from gallery </Button>
-                <Button onPress={cameraImg}>Add from camera </Button>
+                <List.Item 
+                  title='Gallery'
+                  onPress={pickImage}
+                  left={props => <List.Icon {...props} icon="folder-image" />}
+                />
+                <List.Item 
+                  title='Camera'
+                  onPress={cameraImg}
+                  left={props => <List.Icon {...props} icon="camera" />}
+                />
                 </Dialog.Content>
               </Dialog>
             </Portal>

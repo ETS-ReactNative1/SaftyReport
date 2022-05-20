@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, TouchableOpacity  } from 'react-native';
+import { View, TouchableOpacity, Text  } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { List } from 'react-native-paper';
 import ImageView from "react-native-image-viewing";
@@ -35,12 +35,15 @@ function list() {
   const images = [
     {
       uri: rewards.firstUrl,
+      title: rewards.firstName
     },
     {
       uri: rewards.secondUrl,
+      title: rewards.secondName
     },
     {
       uri: rewards.thirdUrl,
+      title: rewards.thirdName
     },
   ];
 

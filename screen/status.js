@@ -11,9 +11,9 @@ import { api } from '../constants/api';
 
 const FILTER_MAP = {
   All: () => true,
-  Unfinished: task => task.isFinished === "Not Finished",
-  Going: task => task.isFinished === "Going",
-  Done: task => task.isFinished === "Done"
+  Unfinish: task => task.isFinished === "Not Finished",
+  'Under Investigation': task => task.isFinished === "Going",
+  Completed: task => task.isFinished === "Done"
 };
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
